@@ -16,7 +16,7 @@ public interface CommentJpaRepository extends JpaRepository<Comment, Serializabl
 	
 	Comment findById(Long id);
 	
-	@Query("SELECT c FROM Comment c WHERE c.postId = :postId AND c.comment LIKE %:query%")
-    List<Comment> searchComments(@Param("postId") Long postId, @Param("query") String query);
+	 @Query("SELECT c FROM Comment c WHERE c.postId = :postId AND c.comment LIKE %:query%")
+	    List<Comment> searchComments(@Param("postId") Long postId, @Param("query") String query);
 
 }
