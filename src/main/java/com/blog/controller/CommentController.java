@@ -1,8 +1,14 @@
 package com.blog.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.service.CommentService;
@@ -30,5 +36,39 @@ public class CommentController {
 					return new Result(500, "Fail");
 				}
 	}
+	
+	@GetMapping("/comments")
+	public List<Comment> getComment(@RequestParam("postId") Long postId) {
+		List<Comment> comments = commentService.getCommentList(postId);
+		return comments;
+	}
+	
+
+    @GetMapping("/comment")
+    public Object getCommentt(@RequestParam("id") Long id) {
+        return commentService.getComment(id);
+    }
+   
+    
+	@DeleteMapping("/comment")
+	public Object deleteComment(HttpServletResponse response, @RequestParam("id") Long id) {
+		boolean isSuccess = commentService.deleteComment(id);
+		
+//		log.info("id ::: "+ id);
+		
+		if(isSuccess) {
+			return new Result(200, "Success");
+		}else {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return new Result(500, "Fail");
+		}
+	}
+	
+	@GetMapping("/comments/search")
+	public List<Comment> searchComments(@RequestParam("postId") Long postId, @RequestParam("query") String query) {
+	    List<Comment> comments = commentService.searchComments(postId, query);
+	    return comments;
+	}
+	
 	
 }
